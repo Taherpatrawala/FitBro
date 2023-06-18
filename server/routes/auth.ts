@@ -2,12 +2,12 @@ import express from "express";
 import { body, validationResult } from "express-validator";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
-import { Jwt } from "jsonwebtoken";
+import Jwt from "jsonwebtoken";
 
 const router = express.Router();
 
 router.post(
-  "/login",
+  "/signin",
   body("email")
     .notEmpty()
     .withMessage("Email is required")
@@ -48,8 +48,57 @@ router.post(
       password: hashedPass,
     });
 
-    res.json(user);
+    const token = Jwt.sign(
+      { email: newUser.email },
+      process.env.JWT_SECRET as string
+    );
+
+    res.json({
+      errors: [],
+      data: {
+        token: token,
+        id: newUser._id,
+        email: newUser.email,
+      },
+    });
   }
 );
+
+router.post("/login", async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.json({
+      errors: [
+        {
+          msg: "Email not found!",
+        },
+      ],
+    });
+  }
+
+  const passMatch = await bcrypt.compare(password, user.password);
+
+  if (!passMatch) {
+    return res.json({
+      errors: [
+        {
+          msg: "Invalid Password",
+        },
+      ],
+    });
+  }
+
+  const token = Jwt.sign(
+    { email: user.email },
+    process.env.JWT_SECRET as string
+  );
+
+  res.json({
+    errors: [],
+    data: { token: token, id: user._id, email: user.email },
+  });
+});
 
 export default router;

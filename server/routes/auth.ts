@@ -1,6 +1,8 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
 import User from "../models/user";
+import bcrypt from "bcryptjs";
+import { Jwt } from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -19,15 +21,14 @@ router.post(
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({ errors: errors.array().map((err) => err.msg) });
+      return res.json({
+        errors: errors.array().map((err) => err.msg),
+        data: null,
+      });
     }
     const { email, password } = req.body;
-    /* res.json({
-        email,
-        password
-    })*/
 
-    const user = await User.findOne({ email});
+    const user = await User.findOne({ email });
 
     if (user) {
       return res.json({
@@ -39,6 +40,13 @@ router.post(
         data: null,
       });
     }
+
+    const hashedPass = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      email,
+      password: hashedPass,
+    });
 
     res.json(user);
   }

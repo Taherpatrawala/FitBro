@@ -3,11 +3,11 @@ const express = require("express");
 import router from "./routes/auth";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { log } from "console";
+import cors from "cors";
 const app = express();
 
 dotenv.config();
-
+app.use(cors());
 app.use(express.json());
 
 app.use("/auth", router);

@@ -31,7 +31,6 @@ router.post(
     const user = await User.findOne({ email });
 
     if (user) {
-      console.log("Email is already being used");
       return res.json({
         errors: [
           {
@@ -93,7 +92,8 @@ router.post("/login", async (req, res, next) => {
 
   const token = Jwt.sign(
     { email: user.email },
-    process.env.JWT_SECRET as string
+    process.env.JWT_SECRET as string,
+    { expiresIn: "1d" } //this indicates that the token will expire in 1 day and the user will have to login again
   );
 
   res.json({

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const location = useLocation();
@@ -11,19 +12,36 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     if (path === "/login") {
-      const response = await axios.post("http://localhost:8080/auth/login", {
+      const LogInData = await axios.post("http://localhost:8080/auth/login", {
         email,
         password,
       });
+      const popupMsg =
+        LogInData.data?.errors[0]?.msg || LogInData.data?.errors[0];
+      (await popupMsg)
+        ? toast.error(popupMsg, {
+            style: {
+              border: "1px solid #713200",
+            },
+          })
+        : toast.success("Logged in Succefully!", {
+            style: {
+              border: "1px solid #713200",
+            },
+          });
+      console.log(LogInData.data);
+      localStorage.setItem("token", LogInData.data?.data.token);
+      navigate("/articles");
+
       //   .then((res) => {
       //     console.log(res);
       //     toast.success("User Logged in");
       //   })
       //   .catch((err) => console.log(err));
-      console.log(response);
     } else {
       const SignInData = await axios.post("http://localhost:8080/auth/signin", {
         email,
@@ -43,6 +61,7 @@ export default function Login() {
               border: "1px solid #713200",
             },
           });
+      console.log(SignInData.data);
       //   .then((res) => {
       //     console.log(res);
       //     toast.success(<b>User Registered</b>);

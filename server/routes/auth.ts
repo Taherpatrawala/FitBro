@@ -31,6 +31,7 @@ router.post(
     const user = await User.findOne({ email });
 
     if (user) {
+      console.log("Email is already being used");
       return res.json({
         errors: [
           {

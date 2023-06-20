@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
   const location = useLocation();
@@ -12,18 +13,35 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
+    let data;
     if (path === "/login") {
       const response = await axios.post("http://localhost:8080/auth/login", {
         email,
         password,
       });
+      //   .then((res) => {
+      //     console.log(res);
+      //     toast.success("User Logged in");
+      //   })
+      //   .catch((err) => console.log(err));
       console.log(response);
     } else {
-      const response = await axios.post("http://localhost:8080/auth/signin", {
+      const SignInData = await axios.post("http://localhost:8080/auth/signin", {
         email,
         password,
       });
-      console.log(response);
+      // data = SignInData;
+      const popupMsg =
+        SignInData.data?.errors[0].msg || SignInData.data?.errors[0];
+      toast.error(<b>{popupMsg}</b>);
+      //   .then((res) => {
+      //     console.log(res);
+      //     toast.success(<b>User Registered</b>);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     toast.error(<b>{err.msg}</b>);
+      //   });
     }
   };
 
@@ -42,7 +60,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6">
+          <div className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -106,8 +124,9 @@ export default function Login() {
               >
                 {root}
               </button>
+              <Toaster />
             </div>
-          </form>
+          </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{" "}

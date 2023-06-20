@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
+import HeroImage from "../../assets/clay-banks-w_qTfiPbjbg-unsplash.jpg";
 
 const Body = () => {
   return (
     <div
       className="h-screen w-screen bg-cover z-10"
       style={{
-        backgroundImage: "url(/src/assets/clay-banks-w_qTfiPbjbg-unsplash.jpg)",
+        backgroundImage: `url(${HeroImage})`,
       }}
     >
       <div className="h-full w-full flex justify-center items-center">

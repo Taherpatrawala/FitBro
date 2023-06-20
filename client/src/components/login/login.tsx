@@ -13,7 +13,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    let data;
     if (path === "/login") {
       const response = await axios.post("http://localhost:8080/auth/login", {
         email,
@@ -32,8 +31,18 @@ export default function Login() {
       });
       // data = SignInData;
       const popupMsg =
-        SignInData.data?.errors[0].msg || SignInData.data?.errors[0];
-      toast.error(<b>{popupMsg}</b>);
+        SignInData.data?.errors[0]?.msg || SignInData.data?.errors[0];
+      popupMsg
+        ? toast.error(popupMsg, {
+            style: {
+              border: "1px solid #713200",
+            },
+          })
+        : toast.success("Signed in Succefully!", {
+            style: {
+              border: "1px solid #713200",
+            },
+          });
       //   .then((res) => {
       //     console.log(res);
       //     toast.success(<b>User Registered</b>);

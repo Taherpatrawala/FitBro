@@ -20,10 +20,17 @@ const CheckAuth = async (req: Request, res: Response, next: NextFunction) => {
     )) as { email: string };
 
     req.user = user.email;
+    next();
   } catch (error) {
-    console.log(error);
+    res.status(403).json({
+      errors: [
+        {
+          msg: "User is unauthorized",
+        },
+      ],
+    });
   }
 
-  res.send(token);
+  // res.send(token);
 };
 export default CheckAuth;

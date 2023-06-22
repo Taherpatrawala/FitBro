@@ -4,6 +4,7 @@ import User from "../models/user";
 import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
 import CheckAuth from "../middlewares/checkAuth";
+import user from "../models/user";
 
 const router = express.Router();
 
@@ -103,8 +104,15 @@ router.post("/login", async (req, res, next) => {
   });
 });
 
-router.get("/me", CheckAuth, (req, res, next) => {
-  res.send("This is me route");
+router.get("/me", CheckAuth, async (req, res, next) => {
+  // res.send("This is me route");
+  const user = await User.findOne({ email: req.user });
+  return res.json({
+    errors: [],
+    data: {
+      user: { id: user?._id, email: user?.email },
+    },
+  });
 });
 
 export default router;

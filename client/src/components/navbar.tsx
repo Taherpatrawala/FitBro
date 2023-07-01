@@ -1,8 +1,21 @@
 import { NavLink, useLocation } from "react-router-dom";
+import { useContext, useState } from "react";
+import { UserContext } from "./context/context";
 
 const Navbar = () => {
   const location = useLocation();
   const path = location.pathname;
+
+  const [logState, setLogState] = useContext(UserContext);
+
+  const handleLogOut = () => {
+    setLogState({
+      data: null,
+      loading: false,
+      error: null,
+    });
+    localStorage.removeItem("token");
+  };
 
   return (
     <div
@@ -62,11 +75,23 @@ const Navbar = () => {
               Company
             </a>
           </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <NavLink to="/login" className="text-sm font-semibold leading-6 ">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </NavLink>
-          </div>
+          {!logState.data ? (
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              <NavLink to="/login" className="text-sm font-semibold leading-6 ">
+                Log in <span aria-hidden="true">&rarr;</span>
+              </NavLink>
+            </div>
+          ) : (
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              <NavLink
+                to="/"
+                className="text-sm font-semibold leading-6 "
+                onClick={handleLogOut}
+              >
+                Log out <span aria-hidden="true">&rarr;</span>
+              </NavLink>
+            </div>
+          )}
         </nav>
       </header>
     </div>

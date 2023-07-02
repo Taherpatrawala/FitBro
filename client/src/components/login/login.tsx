@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/context";
 
 export default function Login() {
   const location = useLocation();
@@ -13,6 +14,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [logState, setLogState] = useContext(UserContext);
 
   const handleSubmit = async () => {
     if (path === "/login") {
@@ -20,6 +22,7 @@ export default function Login() {
         email,
         password,
       });
+
       const popupMsg =
         LogInData.data?.errors[0]?.msg || LogInData.data?.errors[0];
       (await popupMsg)
@@ -33,21 +36,29 @@ export default function Login() {
               border: "1px solid #713200",
             },
           });
+
+      setLogState({
+        data: {
+          id: LogInData.data?.id,
+          email: LogInData.data?.email,
+        },
+        loading: false,
+        error: null,
+      });
+
+      axios.defaults.headers.common[
+        "authorization"
+      ] = `${LogInData.data?.token}`;
+
       console.log(LogInData.data);
       localStorage.setItem("token", LogInData.data?.data.token);
       navigate("/articles");
-
-      //   .then((res) => {
-      //     console.log(res);
-      //     toast.success("User Logged in");
-      //   })
-      //   .catch((err) => console.log(err));
     } else {
       const SignInData = await axios.post("http://localhost:8080/auth/signin", {
         email,
         password,
       });
-      // data = SignInData;
+
       const popupMsg =
         SignInData.data?.errors[0]?.msg || SignInData.data?.errors[0];
       popupMsg
@@ -62,14 +73,6 @@ export default function Login() {
             },
           });
       console.log(SignInData.data);
-      //   .then((res) => {
-      //     console.log(res);
-      //     toast.success(<b>User Registered</b>);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     toast.error(<b>{err.msg}</b>);
-      //   });
     }
   };
 

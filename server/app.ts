@@ -4,6 +4,7 @@ import router from "./routes/auth";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import subsRouter from "./routes/subs";
 const app = express();
 app.use(cors());
 dotenv.config();
@@ -11,6 +12,8 @@ dotenv.config();
 app.use(express.json());
 
 app.use("/auth", router);
+
+app.use("/subs", subsRouter);
 
 mongoose
   .connect(process.env.Mongo_Uri as string)

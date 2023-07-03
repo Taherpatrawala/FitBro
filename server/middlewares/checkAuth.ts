@@ -8,16 +8,15 @@ const CheckAuth = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(403).json({
       errors: [
         {
-          msg: "User is unauthorized",
+          msg: "User is unauthorized :(",
         },
       ],
     });
   }
   try {
-    const user = (await Jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    )) as { email: string };
+    const user = Jwt.verify(token, process.env.JWT_SECRET as string) as {
+      email: string;
+    };
 
     req.user = user.email;
     next();

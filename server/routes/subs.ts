@@ -5,10 +5,11 @@ import CheckAuth from "../middlewares/checkAuth";
 
 const subsRouter = express.Router();
 
-subsRouter.get("/prices", async (req, res, next) => {
+subsRouter.get("/prices", CheckAuth, async (req, res, next) => {
   const prices = await stripe.prices.list({
     apiKey: process.env.STRIPE_SECRET_KEY,
   });
+  return res.json(prices);
 });
 
 export default subsRouter;

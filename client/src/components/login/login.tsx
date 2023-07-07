@@ -41,6 +41,7 @@ export default function Login() {
         data: {
           id: LogInData.data?.id,
           email: LogInData.data?.email,
+          customerStripeId: LogInData.data?.customerStripeId,
         },
         loading: false,
         error: null,

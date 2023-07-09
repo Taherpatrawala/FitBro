@@ -124,7 +124,7 @@ router.get("/me", CheckAuth, async (req, res, next) => {
       user: {
         id: user?._id,
         email: user?.email,
-        stripeCustomerId: user?.customerStripeId || null,
+        stripeCustomerId: user?.customerStripeId,
       },
     },
   });

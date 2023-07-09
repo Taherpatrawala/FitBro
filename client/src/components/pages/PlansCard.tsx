@@ -1,4 +1,14 @@
+import axios from "axios";
+
 const Plan = ({ plan }: any) => {
+  const createSession = async (priceId: string) => {
+    const sessionData = await axios.post("http://localhost:8080/subs/session", {
+      priceId,
+    });
+    console.log(sessionData);
+    window.location.href = `${sessionData?.data.url}`;
+  };
+
   return (
     <div className={`w-[30vw] h-[40vh] bg-[#524f4f] m-1 rounded-2xl`}>
       <div className="flex flex-col justify-center items-center text-white">
@@ -12,7 +22,12 @@ const Plan = ({ plan }: any) => {
           </p>
         </div>
 
-        <button className="text-white bg-[#639952] p-2 rounded-md">Buy</button>
+        <button
+          onClick={() => createSession(plan.id)}
+          className="text-white bg-[#639952] p-2 rounded-md"
+        >
+          Buy
+        </button>
       </div>
     </div>
   );

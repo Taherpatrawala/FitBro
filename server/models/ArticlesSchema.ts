@@ -7,7 +7,7 @@ const articleSchema = new Schema({
   content: { type: String, trime: true, required: true },
   access: {
     type: String,
-    enum: ["Basic", "Standard", "Premium"],
+    enum: ["Basic", "Standard", "Premium"], // enum means string objects that have to be one of the values in the array
     required: true,
   },
 });

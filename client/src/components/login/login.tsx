@@ -16,6 +16,11 @@ export default function Login() {
   const navigate = useNavigate();
   const [logState, setLogState] = useContext(UserContext);
 
+  async function handleGoogleSignIn() {
+    let googleAcc = await axios.get("http://localhost:8080/google");
+    console.log(googleAcc);
+  }
+
   const handleSubmit = async () => {
     if (path === "/login") {
       const LogInData = await axios.post("http://localhost:8080/auth/login", {
@@ -169,6 +174,9 @@ export default function Login() {
               Start a 14 day free trial
             </a>
           </p>
+          {path == "/signin" && (
+            <button onClick={handleGoogleSignIn}>Sign Up with Google</button>
+          )}
         </div>
       </div>
     </>

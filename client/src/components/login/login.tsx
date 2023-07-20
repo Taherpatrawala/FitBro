@@ -16,9 +16,8 @@ export default function Login() {
   const navigate = useNavigate();
   const [logState, setLogState] = useContext(UserContext);
 
-  async function handleGoogleSignIn() {
-    let googleAcc = await axios.get("http://localhost:8080/google");
-    console.log(googleAcc);
+  function handleGoogleSignIn() {
+    window.location.href = "http://localhost:8080/google";
   }
 
   const handleSubmit = async () => {

@@ -1,16 +1,13 @@
 import passport from "passport";
+require("dotenv").config();
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-
-let GOOGLE_CLIENT_ID =
-  "327030475904-jmb6ufm58lrsq4muutp63puvdakgq25f.apps.googleusercontent.com";
-let GOOGLE_CLIENT_SECRET = "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";
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:5173/google/callback",
     },
     function (accessToken: any, refreshToken: any, profile: any, done: any) {

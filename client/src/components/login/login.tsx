@@ -56,6 +56,8 @@ export default function Login() {
       ] = `${LogInData.data?.token}`;
 
       console.log(LogInData.data);
+      console.log(logState);
+
       localStorage.setItem("token", LogInData.data?.data.token);
       navigate("/articles");
     } else {

@@ -16,10 +16,6 @@ export default function Login() {
   const navigate = useNavigate();
   const [logState, setLogState] = useContext(UserContext);
 
-  function handleGoogleSignIn() {
-    window.location.href = "http://localhost:8080/google";
-  }
-
   const handleSubmit = async () => {
     if (path === "/login") {
       const LogInData = await axios.post("http://localhost:8080/auth/login", {
@@ -98,19 +94,6 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          {path == "/signin" && (
-            <button
-              onClick={handleGoogleSignIn}
-              className="text-white bg-[#313131] w-full p-2 rounded-lg flex justify-center -translate-y-6"
-            >
-              <img
-                src="https://www.vectorlogo.zone/logos/google/google-icon.svg"
-                alt=""
-                className="w-[30px] mr-4"
-              />
-              <p>Sign Up with Google</p>
-            </button>
-          )}
           <div className="space-y-6">
             <div>
               <label

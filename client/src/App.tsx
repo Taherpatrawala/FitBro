@@ -20,6 +20,7 @@ function App() {
           <Route path="/articles" element={<ProtectedRoutes />}>
             <Route path="/articles" element={<Articles />} />
           </Route>
+
           <Route path="/articles-plans" element={<ArticalPlans />} />
         </Routes>
       </div>

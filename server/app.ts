@@ -5,9 +5,6 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import subsRouter from "./routes/subs";
-import passport from "passport";
-import "./routes/google";
-import session from "express-session";
 
 const app = express();
 app.use(cors());
@@ -18,32 +15,6 @@ app.use(express.json());
 app.use("/auth", router);
 
 app.use("/subs", subsRouter);
-
-app.use(session({ secret: `${process.env.JWT_SECRET}` }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get(
-  "/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
-);
-
-app.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/protected",
-    failureRedirect: "/failure",
-  })
-);
-
-app.get("/protected", (req: Request, res: Response, next: NextFunction) => {
-  const user = JSON.stringify(req.user);
-
-  console.log("User " + user);
-  //res.send("<h1>Welcome to the protected route</h1>");
-  // res.json(user);
-  res.send(user);
-});
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   interface obj {
